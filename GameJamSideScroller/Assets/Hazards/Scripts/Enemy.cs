@@ -21,10 +21,13 @@ namespace Hazard
         // Update is called once per frame
         void Update()
         {
-            if (hp <= 0)
-            {
-                Die();
-            }
+
+        }
+
+        public void TakeDamage(int damage)
+        {
+            hp -= damage;
+            if (hp <= 0) { Die(); }
         }
 
         // Method to handle death animation and stuff

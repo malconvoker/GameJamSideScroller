@@ -23,7 +23,7 @@ namespace Hazard
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (other.gameObject.GetComponent<Light>() != null)
+            if (other.gameObject.GetComponent<PlayerLight>() != null)
             {
                 Fade();
             }
