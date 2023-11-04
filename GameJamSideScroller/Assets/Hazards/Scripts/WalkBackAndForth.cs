@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Hazard
 {
+    [RequireComponent(typeof(ContactDamage))]
+    [RequireComponent(typeof(Enemy))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public class WalkBackAndForth : MonoBehaviour
     {
         [SerializeField] private float moveSpeed = 1f;
