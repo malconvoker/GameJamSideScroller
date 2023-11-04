@@ -11,15 +11,26 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private int jumpsRemaining;
 
+    SpriteRenderer rbSprite;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         jumpsRemaining = maxJumps;
+        rbSprite = GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
+        if (horizontalInput < 0)
+        {
+            rbSprite.flipX = true;
+        }
+        else
+        {
+            rbSprite.flipX = false;
+        }
 
         Vector3 movement = new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
         transform.Translate(movement);
