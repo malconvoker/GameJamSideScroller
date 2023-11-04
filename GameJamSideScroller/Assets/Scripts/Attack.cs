@@ -3,16 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeAttack : MonoBehaviour
+public class Attack : MonoBehaviour
 {
     public int damage = 1;
     public float lifeTime = 0.5f;
     public float timeLeft = 0f;
     private bool dealtDamage = false;
+    [SerializeField] private bool ranged = false;
+    private Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
+        if (ranged)
+        {
+            rb = GetComponent<Rigidbody2D>();
+            lifeTime = 5f;
+        }
         timeLeft = lifeTime;
     }
 
@@ -24,6 +31,11 @@ public class MeleeAttack : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void Fly(Vector2 direction, float velocity)
+    {
+        rb.velocity = direction.normalized * velocity;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
