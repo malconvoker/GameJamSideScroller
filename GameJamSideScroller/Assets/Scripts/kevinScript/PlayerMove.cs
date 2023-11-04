@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody2D rb;
     private int jumpsRemaining;
+    private bool isGrounded = true;
 
     SpriteRenderer rbSprite;
 
@@ -53,6 +54,9 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             jumpsRemaining = maxJumps;
+
         }
     }
+
+
 }
