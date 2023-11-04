@@ -12,12 +12,15 @@ public class PlayerMovement : MonoBehaviour
     private int jumpsRemaining;
 
     SpriteRenderer rbSprite;
+    Animator _playerAnimator;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         jumpsRemaining = maxJumps;
         rbSprite = GetComponent<SpriteRenderer>();
+
+        _playerAnimator = GetComponent<Animator>();
     }
 
     void Update()
@@ -38,6 +41,15 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && jumpsRemaining > 0)
         {
             Jump();
+        }
+
+        if (horizontalInput != 0)
+        {
+            _playerAnimator.SetBool("Is Moving", true);
+        }
+        else
+        {
+            _playerAnimator.SetBool("Is Moving", false);
         }
     }
 
