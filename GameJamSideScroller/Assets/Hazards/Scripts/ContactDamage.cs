@@ -9,7 +9,7 @@ namespace Hazard
     /// </summary>
     public class ContactDamage : MonoBehaviour
     {
-        public int damage = 1;
+        public float damage = 10f;
         public float knockback = 1f;
         public float cooldown = 1f;
         private float cdTimer = 0f;
@@ -36,7 +36,7 @@ namespace Hazard
                 else
                 {
                     Debug.Log("Hit player");
-                    collision.gameObject.GetComponent<PlayerHealth>().TakeDamage(damage);
+                    collision.gameObject.GetComponent<HealthManager>().TakeDamage(damage);
 
                     if (collision.gameObject.transform.position.x < transform.position.x)
                     {
