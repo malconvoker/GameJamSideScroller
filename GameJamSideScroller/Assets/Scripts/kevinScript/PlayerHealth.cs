@@ -18,21 +18,22 @@ public class PlayerHealth : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Collision Detected with: " + gameObject.name);
+        Debug.Log("Collision Detected with: " + collision.gameObject.name);
 
         if (isDead) return; // Don't take damage if the player is already dead.
 
-        if (collision.gameObject.CompareTag("Trap"))
+        /*if (collision.gameObject.CompareTag("Trap"))
         {
             Debug.Log("Player touched a trap.");
             TakeDamage(1); // Reduce health by 1 when the player touches a trap.
-        }
+        }*/
     }
 
 
-    void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         currentHealth -= damage; // Reduce the player's health.
+        Debug.Log("Current health is " + currentHealth);
 
         if (currentHealth <= 0)
         {
