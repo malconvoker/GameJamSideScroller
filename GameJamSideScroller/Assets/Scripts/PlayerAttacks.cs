@@ -16,11 +16,12 @@ public class PlayerAttacks : MonoBehaviour
     public float cooldown = 0.5f;
     private float cooldownTimer;
     public HealthManager health;
+    [SerializeField] private Animator anim; // Reference to the Animator component.
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -39,7 +40,7 @@ public class PlayerAttacks : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-
+            anim.SetTrigger("Attack");
             Instantiate(meleeAttack, attackLocation.position, transform.rotation);
         }
         if (Input.GetButtonDown("Fire2"))
@@ -50,10 +51,13 @@ public class PlayerAttacks : MonoBehaviour
                 .gameObject.GetComponent<Rigidbody2D>().velocity = facingDirection.normalized * fireballSpeed;
                 cooldownTimer = cooldown;
                 health.TakeDamage(castCost);
+                anim.SetTrigger("Attack");
             }
             // Make a fireball, make it fly in the facing direction
             
         }
         cooldownTimer -= Time.deltaTime;
+
+        anim.SetBool("Is Attacking", false);
     }
 }
