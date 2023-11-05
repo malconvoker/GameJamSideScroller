@@ -78,15 +78,16 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.Idle;
         }
 
-            if (rb.velocity.y > 0.1f)
-            {
-                state = MovementState.Jumping;
-            }
-            else if (rb.velocity.y < -0.1f)
-            {
-                state = MovementState.Falling;
-            }
-            anim.SetInteger("state", (int)state);
+        if (rb.velocity.y > 0.1f)
+        {
+            state = MovementState.Jumping;
+        }
+
+        else if (rb.velocity.y < -0.1f)
+       {
+            state = MovementState.Falling;
+        }
+        anim.SetInteger("state", (int)state);
 
 
         }
