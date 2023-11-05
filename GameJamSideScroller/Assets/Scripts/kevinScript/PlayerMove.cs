@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public bool facingRight = true;
 
     SpriteRenderer rbSprite;
+   
 
     private enum MovementState
     {
@@ -30,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private BoxCollider2D boxCollider2D;
     [SerializeField] private LayerMask groundLayerMask;
+    [SerializeField] private AudioSource audioSource;
 
     void Start()
     {
@@ -38,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
         rbSprite = GetComponent<SpriteRenderer>();
         boxCollider2D = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -68,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && jumpsRemaining > 0 && isGrounded)
         {
             Jump();
+            audioSource.Play();
         }
 
         if (IsGrounded() && rb.velocity.y <= 0) // Check if the player is grounded and not rising from a jump.
@@ -101,13 +105,22 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.Jumping;
         }
 
+
         else if (rb.velocity.y < -0.1f)
        {
             state = MovementState.Falling;
         }
         anim.SetInteger("state", (int)state);
+         
 
 
+        if (Input.GetButtonDown("Fire1"))
+        {
+            state = MovementState.Attack;
+
+            // Trigger the attack animation.
+            anim.SetTrigger("Attack");
+        }
         }
         void Jump()
         {
@@ -125,10 +138,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-    public void AttackAnimation()
-    {
-        state = MovementState.Attack;
-    }
+   
 
     private bool IsGrounded()
     {
