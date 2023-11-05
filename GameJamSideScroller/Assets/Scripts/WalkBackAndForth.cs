@@ -17,12 +17,20 @@ namespace Hazard
         [SerializeField] private bool movingRight = false;
         [SerializeField] private bool movingVertical = false;
 
+        private SpriteRenderer sprite;
+
         private Rigidbody2D rb;
 
         // Start is called before the first frame update
         void Start()
         {
             rb = GetComponent<Rigidbody2D>();
+            sprite = GetComponent<SpriteRenderer>();
+        }
+
+        private void Update()
+        {
+            sprite.flipX = movingRight;
         }
 
         void FixedUpdate()
