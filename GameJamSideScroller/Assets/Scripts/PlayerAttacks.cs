@@ -12,6 +12,10 @@ public class PlayerAttacks : MonoBehaviour
     private Transform attackLocation;
     public Vector2 facingDirection = Vector2.right;
     public float fireballSpeed = 5f;
+    public float castCost = 5f;
+    public float cooldown = 0.5f;
+    private float cooldownTimer;
+    public HealthManager health;
 
     // Start is called before the first frame update
     void Start()
@@ -40,9 +44,16 @@ public class PlayerAttacks : MonoBehaviour
         }
         if (Input.GetButtonDown("Fire2"))
         {
-            // Make a fireball, make it fly in the facing direction
-            Instantiate(rangedAttack, attackLocation.position, transform.rotation)
+            if (cooldownTimer <= 0 )
+            {
+                Instantiate(rangedAttack, attackLocation.position, transform.rotation)
                 .gameObject.GetComponent<Rigidbody2D>().velocity = facingDirection.normalized * fireballSpeed;
+                cooldownTimer = cooldown;
+                health.TakeDamage(castCost);
+            }
+            // Make a fireball, make it fly in the facing direction
+            
         }
+        cooldownTimer -= Time.deltaTime;
     }
 }
