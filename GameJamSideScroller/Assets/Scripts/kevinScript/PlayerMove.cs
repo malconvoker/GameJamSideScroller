@@ -28,12 +28,15 @@ public class PlayerMovement : MonoBehaviour
     }
     private MovementState state;
 
+    [SerializeField] private BoxCollider2D boxCollider2D;
+    [SerializeField] private LayerMask groundLayerMask;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         jumpsRemaining = maxJumps;
         rbSprite = GetComponent<SpriteRenderer>();
-
+        boxCollider2D = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
     }
 
@@ -62,11 +65,15 @@ public class PlayerMovement : MonoBehaviour
         Vector3 movement = new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
         transform.Translate(movement);
 
-        if (Input.GetButtonDown("Jump") && jumpsRemaining > 0)
+        if (Input.GetButtonDown("Jump") && jumpsRemaining > 0 && isGrounded)
         {
             Jump();
         }
 
+        if (IsGrounded() && rb.velocity.y <= 0) // Check if the player is grounded and not rising from a jump.
+        {
+            jumpsRemaining = maxJumps;
+        }
         UpdateAnimationStatus();
 
     }
@@ -123,5 +130,10 @@ public class PlayerMovement : MonoBehaviour
         state = MovementState.Attack;
     }
 
-    } 
+    private bool IsGrounded()
+    {
+        return Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, 0.1f, groundLayerMask);
+    }
+
+} 
 
