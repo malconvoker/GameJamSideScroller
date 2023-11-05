@@ -10,9 +10,21 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody2D rb;
     private int jumpsRemaining;
+    private bool isGrounded = true;
+
+    private Animator anim;
+    private float dirX = 0f;
 
     SpriteRenderer rbSprite;
-    Animator _playerAnimator;
+
+    private enum MovementState
+    {
+        Idle,
+        Walking,
+        Jumping,
+        Falling
+    }
+
 
     void Start()
     {
@@ -20,12 +32,13 @@ public class PlayerMovement : MonoBehaviour
         jumpsRemaining = maxJumps;
         rbSprite = GetComponent<SpriteRenderer>();
 
-        _playerAnimator = GetComponent<Animator>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
+        dirX = Input.GetAxisRaw("Horizontal");
         if (horizontalInput < 0)
         {
             rbSprite.flipX = true;
@@ -43,28 +56,56 @@ public class PlayerMovement : MonoBehaviour
             Jump();
         }
 
-        if (horizontalInput != 0)
+        UpdateAnimationStatus();
+
+    }
+
+    private void UpdateAnimationStatus()
+    {
+
+        MovementState state;
+
+        if (dirX > 0)
         {
-            _playerAnimator.SetBool("Is Moving", true);
+            state = MovementState.Walking;
+        }
+        else if (dirX < 0)
+        {
+            state = MovementState.Walking;
         }
         else
         {
-            _playerAnimator.SetBool("Is Moving", false);
+            state = MovementState.Idle;
         }
-    }
 
-    void Jump()
-    {
-        rb.velocity = new Vector2(rb.velocity.x, 0); // Zero out the vertical velocity before jumping.
-        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        jumpsRemaining--;
-    }
+            if (rb.velocity.y > 0.1f)
+            {
+                state = MovementState.Jumping;
+            }
+            else if (rb.velocity.y < -0.1f)
+            {
+                state = MovementState.Falling;
+            }
+            anim.SetInteger("state", (int)state);
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
+
+        }
+        void Jump()
         {
-            jumpsRemaining = maxJumps;
+            rb.velocity = new Vector2(rb.velocity.x, 0); // Zero out the vertical velocity before jumping.
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            jumpsRemaining--;
         }
-    }
-}
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("Ground"))
+            {
+                jumpsRemaining = maxJumps;
+
+            }
+        }
+
+
+    } 
+

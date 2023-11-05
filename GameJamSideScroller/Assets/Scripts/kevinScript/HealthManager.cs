@@ -7,47 +7,82 @@ using UnityEngine.SceneManagement;
 public class HealthManager : MonoBehaviour
 {
     public Image healthBar;
+    public float maxHealth = 100f;
     public float health = 100f;
+    public float trapDamage = 10f; // Adjust this value as needed for trap damage.
+    public float hopeRefill = 20f; // Adjust this value as needed for hope amount.
 
-    // Start is called before the first frame update
     void Start()
     {
-        
+        // Initialize the player's health to the maximum value.
+        health = maxHealth;
+        UpdateHealthBar();
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        // some condition like if collides with enemy or traps
+        if (collision.gameObject.CompareTag("Traps"))
+        {
+            // The player has collided with a trap. Reduce health by the trap damage amount.
+            TakeDamage(trapDamage);
+        }
+        if (collision.gameObject.CompareTag("Hope"))
+        {
+            CollectHope(collision.gameObject);
+        }
 
-        if (health <= 0f)
-        {
-            // do something like die
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-        }
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            TakeDamage(10f);
-        }
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Heal(10f);
-        }
+    }
+
+    void UpdateHealthBar()
+    {
+        // Update the health bar based on the player's current health.
+        float healthRatio = health / maxHealth;
+        healthBar.fillAmount = healthRatio;
     }
 
     public void TakeDamage(float damageAmount)
     {
+        // Reduce the player's health by the specified damage amount.
         health -= damageAmount;
-        healthBar.fillAmount = health / 100f;
+
+        // Ensure health doesn't go below zero.
+        health = Mathf.Max(health, 0f);
+
+        // Update the health bar.
+        UpdateHealthBar();
+
+        // Check if the player's health has reached zero.
+        if (health <= 0f)
+        {
+            Die();
+        }
+    }
+    public void CollectHope(GameObject hope)
+    {
+        // Destroy the hope object.
+        Destroy(hope);
+        // Increase the player's health by the hope amount.
+        health += hopeRefill;
+
+        // Ensure health doesn't go above the maximum value.
+         health = Mathf.Clamp(health, 0f, maxHealth);
+
+        // Update the health bar.
+        UpdateHealthBar();
+
+    }
+    void Die()
+    {
+        // Handle the player's death (e.g., display a game over screen, respawn, or reload the scene).
+        // For example, you can reload the current scene:
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void Heal(float healAmount)
-    {
-        health += healAmount;
-        healthBar.fillAmount = Mathf.Clamp(healAmount, 0, 100);
+    // Add a Heal method here if you want to implement healing.
 
-        healthBar.fillAmount = healAmount / 100f;
+    void Update()
+    {
+        // Additional logic can be added here if needed.
     }
 }
-    
