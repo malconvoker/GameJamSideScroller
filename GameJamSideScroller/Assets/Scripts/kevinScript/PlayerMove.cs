@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Animator anim;
     private float dirX = 0f;
+    public bool facingRight = true;
 
     SpriteRenderer rbSprite;
 
@@ -22,9 +23,10 @@ public class PlayerMovement : MonoBehaviour
         Idle,
         Walking,
         Jumping,
-        Falling
+        Falling,
+        Attack
     }
-
+    private MovementState state;
 
     void Start()
     {
@@ -41,11 +43,20 @@ public class PlayerMovement : MonoBehaviour
         dirX = Input.GetAxisRaw("Horizontal");
         if (horizontalInput < 0)
         {
-            rbSprite.flipX = true;
+            facingRight = false;
+        }
+        else if (horizontalInput > 0)
+        {
+            facingRight = true;
+        }
+
+        if (facingRight)
+        {
+            rbSprite.flipX = false;
         }
         else
         {
-            rbSprite.flipX = false;
+            rbSprite.flipX = true;
         }
 
         Vector3 movement = new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
@@ -63,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
     private void UpdateAnimationStatus()
     {
 
-        MovementState state;
+        
 
         if (dirX > 0)
         {
@@ -107,6 +118,10 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+    public void AttackAnimation()
+    {
+        state = MovementState.Attack;
+    }
 
     } 
 

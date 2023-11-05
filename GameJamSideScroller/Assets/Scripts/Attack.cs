@@ -11,6 +11,7 @@ public class Attack : MonoBehaviour
     private bool dealtDamage = false;
     [SerializeField] private bool ranged = false;
     private Rigidbody2D rb;
+    private SpriteRenderer sprite;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +19,7 @@ public class Attack : MonoBehaviour
         if (ranged)
         {
             rb = GetComponent<Rigidbody2D>();
+            sprite = GetComponent<SpriteRenderer>();
             lifeTime = 5f;
         }
         timeLeft = lifeTime;
@@ -28,6 +30,16 @@ public class Attack : MonoBehaviour
     {
         timeLeft -= Time.deltaTime;
         if (timeLeft <= 0f)
+        {
+            Destroy(gameObject);
+        }
+
+        if (ranged && rb.velocity.x < 0f)
+        {
+            sprite.flipX = true;
+        }
+
+        if (ranged && dealtDamage)
         {
             Destroy(gameObject);
         }
