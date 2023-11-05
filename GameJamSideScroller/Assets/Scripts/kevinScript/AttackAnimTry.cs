@@ -5,7 +5,6 @@ using UnityEngine;
 public class AttackAnimTry : MonoBehaviour
 {
     [SerializeField] private Animator anim; // Reference to the Animator component.
-   
 
     void Start()
     {
@@ -19,8 +18,8 @@ public class AttackAnimTry : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.J))
         {
             anim.SetTrigger("Attack");
-           
-            
         }
+
+        anim.SetBool("Is Attacking", false);
     }
 }
