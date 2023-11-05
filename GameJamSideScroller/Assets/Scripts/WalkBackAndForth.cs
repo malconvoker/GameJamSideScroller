@@ -15,6 +15,7 @@ namespace Hazard
         [SerializeField] private float waitTime = 1f;
         private float waitTimer = 0f;
         [SerializeField] private bool movingRight = false;
+        [SerializeField] private bool movingVertical = false;
 
         private Rigidbody2D rb;
 
@@ -29,18 +30,10 @@ namespace Hazard
             //if not turning around
             if (waitTimer <= 0f)
             {
-                if (movingRight)
-                {
-                    rb.velocity = Vector2.right * moveSpeed;
-                    //rb.MovePosition(rb.position += new Vector2(moveSpeed * Time.fixedDeltaTime, 0));
-                    //transform.position += new Vector3(moveSpeed * Time.deltaTime, 0);
-                }
-                else
-                {
-                    rb.velocity = Vector2.left * moveSpeed;
-                    //rb.MovePosition(rb.position += new Vector2(-moveSpeed * Time.fixedDeltaTime, 0));
-                    //transform.position -= new Vector3(moveSpeed * Time.deltaTime, 0);
-                }
+                rb.velocity = movingVertical ?
+                    movingRight ? (Vector2.up * moveSpeed) : (Vector2.down * moveSpeed)
+                    :
+                    movingRight ? (Vector2.right * moveSpeed) : (Vector2.left * moveSpeed);
             }
             else
             {

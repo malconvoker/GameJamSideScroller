@@ -143,7 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   waitTime: 1
-  movingRight: 1
+  movingRight: 0
 --- !u!70 &6193143677593271954
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
